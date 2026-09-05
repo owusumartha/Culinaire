@@ -1,0 +1,141 @@
+* { box-sizing: border-box; }
+a { color: inherit; text-decoration: none; }
+
+[data-theme="dark"] {
+  --cream: #121212;
+  --cream-dark: #1a1a1a;
+  --white: #1e1e1e;
+  --text: #e0e0e0;
+  --text-muted: #9e9e9e;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 15px 45px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] body {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .site-header {
+  background: #0d0d0d;
+}
+
+[data-theme="dark"] .section-alt {
+  background: #1a1a1a;
+}
+
+[data-theme="dark"] .product-card {
+  background: #1e1e1e;
+}
+
+[data-theme="dark"] .product-card h3 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .product-card .price {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .shop-toolbar {
+  background: #1e1e1e;
+}
+
+[data-theme="dark"] .search-box {
+  background: #2a2a2a;
+}
+
+[data-theme="dark"] .search-box input {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .filter-btn {
+  background: #2a2a2a;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .view-toggle {
+  background: #2a2a2a;
+}
+
+[data-theme="dark"] .page-hero {
+  background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+}
+
+[data-theme="dark"] .newsletter {
+  background: linear-gradient(135deg, #c9a227 0%, #a8841f 100%);
+}
+
+[data-theme="dark"] .newsletter h2,
+[data-theme="dark"] .newsletter p {
+  color: #1a1a1a;
+}
+
+[data-theme="dark"] .about-banner h2 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .about-banner p {
+  color: #9e9e9e;
+}
+
+[data-theme="dark"] .feature p {
+  color: #9e9e9e;
+}
+
+[data-theme="dark"] .footer-grid a,
+[data-theme="dark"] .footer-grid p {
+  color: #b0b0b0;
+}
+
+[data-theme="dark"] .section-head h2 {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .admin-form-card,
+[data-theme="dark"] .admin-table-card {
+  background: #1e1e1e;
+}
+
+[data-theme="dark"] .admin-product-card {
+  background: #2a2a2a;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #3a3a3a;
+}
+
+[data-theme="dark"] .wishlist-item,
+[data-theme="dark"] .cart-item {
+  background: #1e1e1e;
+  border-color: #2a2a2a;
+}
+
+[data-theme="dark"] .track-box,
+[data-theme="dark"] .wholesale-box {
+  background: #1e1e1e;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background: none;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+.theme-toggle:hover {
+  background: var(--gold);
+  color: var(--charcoal);
+}
