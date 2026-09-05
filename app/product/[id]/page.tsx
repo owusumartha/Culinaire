@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getProduct, getAllProducts, formatPrice, getProductImageSrc, getReviews, addReview, avgRating } from '../../lib/products';
+import { getProduct, getAllProducts, formatPrice, getProductImageSrc, getReviews, addReview, avgRating, addRecentlyViewed, getRecentlyViewed } from '../../lib/products';
 import { useCart } from '../../lib/contexts';
 import { useWishlist } from '../../lib/contexts';
 import ProductCard from '../../components/ProductCard';
-import { HeartIcon, StarIcon, TruckIcon, ShieldIcon, RotateCcwIcon } from '../../components/Icons';
+import { HeartIcon, StarIcon, TruckIcon, ShieldIcon, RotateCcwIcon, ChatIcon } from '../../components/Icons';
 import { Product, Review } from '../../lib/types';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
@@ -15,10 +15,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   const [qty, setQty] = useState(1);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [related, setRelated] = useState<Product[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
   const [reviewName, setReviewName] = useState('');
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
   const [hoverRating, setHoverRating] = useState(0);
+  const [copied, setCopied] = useState(false);
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
 
@@ -26,11 +28,13 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     const p = getProduct(Number(id));
     setProduct(p);
     if (p) {
+      addRecentlyViewed(p.id);
       setReviews(getReviews(p.id));
       const rel = getAllProducts()
         .filter(r => r.category === p.category && r.id !== p.id)
         .slice(0, 4);
       setRelated(rel);
+      setRecentlyViewed(getRecentlyViewed().filter(r => r.id !== p.id).slice(0, 4));
     }
   }, [id]);
 
@@ -51,6 +55,23 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     setReviewName('');
     setReviewRating(5);
     setReviewText('');
+  };
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareText = `Check out ${product.name} on Culinaire!`;
+
+  const shareWhatsApp = () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank');
+  };
+
+  const shareFacebook = () => {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+  };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -78,6 +99,15 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 {formatPrice(product.price)}
                 {product.oldPrice && <span className="old" style={{ marginLeft: 10 }}>{formatPrice(product.oldPrice)}</span>}
               </div>
+
+              <div style={{ marginBottom: 16 }}>
+                {product.inStock === false ? (
+                  <span style={{ color: '#c0392b', fontWeight: 600, fontSize: '0.9rem' }}>Out of Stock</span>
+                ) : (
+                  <span style={{ color: '#27ae60', fontWeight: 600, fontSize: '0.9rem' }}>In Stock</span>
+                )}
+              </div>
+
               <p style={{ color: '#6b6b6b', marginBottom: 24 }}>{product.description}</p>
 
               <div className="qty-box">
@@ -89,19 +119,36 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
-                <button className="btn btn-gold" onClick={() => addToCart(product.id, qty)}>
+              <div style={{ display: 'flex', gap: 12, marginTop: 20, flexWrap: 'wrap' }}>
+                <button
+                  className="btn btn-gold"
+                  onClick={() => addToCart(product.id, qty)}
+                  disabled={product.inStock === false}
+                >
                   Add to Cart
                 </button>
                 <button
                   className="btn btn-dark"
                   onClick={() => { addToCart(product.id, qty); window.location.href = '/cart'; }}
+                  disabled={product.inStock === false}
                 >
                   Buy Now
                 </button>
               </div>
 
-              <div style={{ marginTop: 24, display: 'flex', gap: 24, fontSize: '0.85rem', color: '#6b6b6b' }}>
+              <div style={{ marginTop: 20, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <button className="share-btn whatsapp" onClick={shareWhatsApp}>
+                  <ChatIcon size={16} color="#fff" /> WhatsApp
+                </button>
+                <button className="share-btn facebook" onClick={shareFacebook}>
+                  Facebook
+                </button>
+                <button className="share-btn copy" onClick={copyLink}>
+                  {copied ? 'Copied!' : 'Copy Link'}
+                </button>
+              </div>
+
+              <div style={{ marginTop: 24, display: 'flex', gap: 24, fontSize: '0.85rem', color: '#6b6b6b', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><TruckIcon size={16} color="#c9a227" /> Free delivery over ₵1,000</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><ShieldIcon size={16} color="#c9a227" /> Quality guarantee</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><RotateCcwIcon size={16} color="#c9a227" /> Easy returns</div>
@@ -177,9 +224,24 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
       </section>
 
+      {/* Recently Viewed */}
+      {recentlyViewed.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <div className="section-head">
+              <div className="eyebrow">Recently Viewed</div>
+              <h2>You Recently Looked At</h2>
+            </div>
+            <div className="product-grid">
+              {recentlyViewed.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Related Products */}
       {related.length > 0 && (
-        <section className="section">
+        <section className="section section-alt">
           <div className="container">
             <div className="section-head">
               <div className="eyebrow">You May Also Like</div>

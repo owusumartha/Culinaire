@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
 import { getAllProducts, getCategories, Product } from '../lib/products';
 
+type SortOption = 'default' | 'price-asc' | 'price-desc' | 'rating' | 'newest';
+
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>(['All']);
   const [activeCategory, setActiveCategory] = useState('All');
   const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<SortOption>('default');
   const [viewMode, setViewMode] = useState<'tiles' | 'icons'>('tiles');
   const [resultCount, setResultCount] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -41,12 +44,26 @@ export default function ShopPage() {
           p.category.toLowerCase().includes(q)
         );
       }
+      switch (sort) {
+        case 'price-asc':
+          items.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-desc':
+          items.sort((a, b) => b.price - a.price);
+          break;
+        case 'rating':
+          items.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'newest':
+          items.sort((a, b) => b.id - a.id);
+          break;
+      }
       setProducts(items);
       setResultCount(items.length);
     } catch (e) {
       console.error('Error filtering products:', e);
     }
-  }, [mounted, activeCategory, search]);
+  }, [mounted, activeCategory, search, sort]);
 
   const handleViewMode = (mode: 'tiles' | 'icons') => {
     setViewMode(mode);
@@ -76,6 +93,17 @@ export default function ShopPage() {
               <button id="searchBtn">Search</button>
             </div>
             <div className="tool-group">
+              <select
+                className="sort-select"
+                value={sort}
+                onChange={(e) => setSort(e.target.value as SortOption)}
+              >
+                <option value="default">Sort by: Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="newest">Newest First</option>
+              </select>
               <div className="filter-tabs" id="filterTabs">
                 {categories.map(cat => (
                   <button

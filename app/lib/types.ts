@@ -9,6 +9,7 @@ export interface Product {
   badge: string | null;
   description: string;
   isAdmin?: boolean;
+  inStock?: boolean;
 }
 
 export interface CartItem {

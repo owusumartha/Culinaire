@@ -5,6 +5,7 @@ import { ToastProvider, CartProvider, WishlistProvider, ThemeProvider } from './
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FloatingButtons from './components/FloatingButtons';
+import BackToTop from './components/BackToTop';
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
   return (
@@ -16,6 +17,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
             <main>{children}</main>
             <Footer />
             <FloatingButtons />
+            <BackToTop />
           </WishlistProvider>
         </CartProvider>
       </ToastProvider>

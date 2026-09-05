@@ -1281,3 +1281,96 @@ ul { list-style: none; }
     transform: none;
   }
 }
+
+/* ---------- Sort select ---------- */
+.sort-select {
+  padding: 10px 16px;
+  border-radius: 50px;
+  border: 2px solid var(--charcoal);
+  background: var(--white);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+.sort-select:focus {
+  border-color: var(--gold);
+}
+
+/* ---------- Share buttons ---------- */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.share-btn:hover { opacity: 0.85; }
+.share-btn.whatsapp { background: #25d366; color: #fff; }
+.share-btn.facebook { background: #1877f2; color: #fff; }
+.share-btn.copy { background: var(--charcoal); color: #fff; }
+
+/* ---------- Back to top ---------- */
+.back-to-top {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--charcoal);
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  z-index: 1400;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.back-to-top:hover { transform: scale(1.1); }
+
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: 90px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+  }
+  .share-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ---------- Print invoice ---------- */
+@media print {
+  .site-header,
+  .site-footer,
+  .floating-contact,
+  .back-to-top,
+  .btn,
+  .newsletter,
+  .page-hero {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .confirmation {
+    box-shadow: none;
+    padding: 0;
+  }
+  .printable-invoice {
+    border: 1px solid #ddd;
+    padding: 20px;
+    background: #fff;
+  }
+}

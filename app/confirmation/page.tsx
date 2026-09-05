@@ -23,7 +23,7 @@ export default function ConfirmationPage() {
       <section className="section">
         <div className="container">
           <div className="empty-cart">
-            <div className="icon"><PackageIcon size={48} color="#c9a227" /></div>
+            <PackageIcon size={48} color="#c9a227" />
             <h3>No order found</h3>
             <p style={{ color: '#6b6b6b', marginBottom: 20 }}>You haven&apos;t placed an order yet.</p>
             <Link href="/shop" className="btn btn-gold">Browse Products</Link>
@@ -39,6 +39,10 @@ export default function ConfirmationPage() {
   const shipping = Number(order.shipping ?? (subtotal >= 1000 ? 0 : 50));
   const total = Number(order.total ?? subtotal + shipping);
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <section className="section">
       <div className="container">
@@ -49,11 +53,11 @@ export default function ConfirmationPage() {
           <div className="order-no">Order #{order.orderNo || 'N/A'}</div>
           <p style={{ marginTop: 8 }}>A confirmation has been sent to <strong>{customer.email || 'your email'}</strong></p>
 
-          <div style={{ background: '#faf6ef', borderRadius: 12, padding: 20, margin: '24px auto', maxWidth: 420, textAlign: 'left' }}>
+          <div className="invoice printable-invoice">
             <h3 style={{ fontFamily: 'Georgia,serif', marginBottom: 12 }}>Order Summary</h3>
             {items.map((item, i) => (
               <div className="summary-row" key={i}>
-                <span>{item.name || 'Product'} × {item.qty || 1}</span>
+                <span>{item.name || 'Product'} x {item.qty || 1}</span>
                 <span>{formatPrice((Number(item.price) || 0) * (Number(item.qty) || 1))}</span>
               </div>
             ))}
@@ -67,7 +71,10 @@ export default function ConfirmationPage() {
             </div>
           </div>
 
-          <Link href="/shop" className="btn btn-gold">Continue Shopping</Link>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 20, flexWrap: 'wrap' }}>
+            <Link href="/shop" className="btn btn-gold">Continue Shopping</Link>
+            <button className="btn btn-outline" onClick={handlePrint}>Print Invoice</button>
+          </div>
         </div>
       </div>
     </section>

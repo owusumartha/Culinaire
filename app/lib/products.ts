@@ -557,3 +557,24 @@ export function starsHTML(rating: number): string {
   }
   return html;
 }
+
+export function addRecentlyViewed(productId: number): void {
+  if (typeof window === 'undefined') return;
+  try {
+    let recent = JSON.parse(localStorage.getItem('culinaireRecent') || '[]');
+    recent = recent.filter((id: number) => id !== productId);
+    recent.unshift(productId);
+    if (recent.length > 10) recent = recent.slice(0, 10);
+    localStorage.setItem('culinaireRecent', JSON.stringify(recent));
+  } catch {}
+}
+
+export function getRecentlyViewed(): Product[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const recent = JSON.parse(localStorage.getItem('culinaireRecent') || '[]');
+    return recent.map((id: number) => getProduct(id)).filter(Boolean) as Product[];
+  } catch {
+    return [];
+  }
+}
