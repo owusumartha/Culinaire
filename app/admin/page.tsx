@@ -5,23 +5,19 @@ import Link from 'next/link';
 import { getAllProducts, addAdminProduct, updateAdminProduct, deleteAdminProduct, formatPrice, getProductImageSrc, Product } from '../lib/products';
 import {
   initEmailJS,
-  sendIntruderAlert,
-  getAdminEmail,
-  setAdminEmail,
-  isFirstLogin,
-  isAuthorizedAdmin
+  sendIntruderAlert
 } from '../lib/emailService';
 import { LockIcon, ShieldIcon } from '../components/Icons';
 
+const ADMIN_EMAIL = 'owusumartha2005@gmail.com';
 const ADMIN_PASSWORD = 'admin123';
 const CATEGORIES = ['Cookware', 'Knives', 'Dinnerware', 'Utensils', 'Appliances', 'Bakeware', 'Decor'];
 
 export default function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loginEmail, setLoginEmail] = useState('');
+  const [loginEmail, setLoginEmail] = useState(ADMIN_EMAIL);
   const [loginPass, setLoginPass] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [isFirst, setIsFirst] = useState(false);
   const [alertSent, setAlertSent] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -37,7 +33,6 @@ export default function AdminPage() {
   useEffect(() => {
     initEmailJS();
     localStorage.removeItem('culinaireAdminSession');
-    setIsFirst(isFirstLogin());
   }, []);
 
   const loadProducts = () => {
@@ -48,27 +43,10 @@ export default function AdminPage() {
     e.preventDefault();
     setAlertSent(false);
 
-    if (isFirst) {
-      setAdminEmail(loginEmail);
-      if (loginPass === ADMIN_PASSWORD) {
-        setLoggedIn(true);
-        setIsFirst(false);
-        loadProducts();
-      } else {
-        setLoginError('Invalid password');
-      }
-      return;
-    }
-
-    if (!isAuthorizedAdmin(loginEmail)) {
+    if (loginPass !== ADMIN_PASSWORD) {
       const sent = await sendIntruderAlert(loginEmail, loginPass);
       setAlertSent(true);
-      setLoginError('Access denied. Owner has been notified.');
-      return;
-    }
-
-    if (loginPass !== ADMIN_PASSWORD) {
-      setLoginError('Invalid password');
+      setLoginError('Invalid password. Owner has been notified.');
       return;
     }
 
@@ -203,12 +181,11 @@ export default function AdminPage() {
             <div style={{ textAlign: 'center', marginBottom: 20 }}>
               <LockIcon size={48} color="#c9a227" />
               <h2>Admin Login</h2>
-              {isFirst && <p style={{ color: '#6b6b6b', fontSize: '0.85rem', marginTop: 8 }}>First time? Register your email to secure admin access.</p>}
             </div>
             <form onSubmit={handleLogin}>
               <div className="form-group">
                 <label>Email</label>
-                <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} placeholder="admin@culinaire.com" required />
+                <input type="email" value={loginEmail} readOnly style={{ background: '#f5f5f5', cursor: 'not-allowed' }} />
               </div>
               <div className="form-group">
                 <label>Password</label>
@@ -224,9 +201,7 @@ export default function AdminPage() {
                   )}
                 </div>
               )}
-              <button type="submit" className="btn btn-gold btn-block">
-                {isFirst ? 'Register & Login' : 'Login'}
-              </button>
+              <button type="submit" className="btn btn-gold btn-block">Login</button>
             </form>
             <div style={{ textAlign: 'center', marginTop: 16 }}>
               <Link href="/">&larr; Back to Store</Link>
