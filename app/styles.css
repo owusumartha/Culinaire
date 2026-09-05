@@ -1165,6 +1165,17 @@ ul { list-style: none; }
   .track-step { min-width: 60px; }
 }
 
+/* Tablet reduced animations (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .product-card:hover {
+    transform: translateY(-3px);
+  }
+  .btn-gold:hover,
+  .btn-dark:hover {
+    transform: translateY(-1px);
+  }
+}
+
 /* Small phones (max-width: 480px) */
 @media (max-width: 480px) {
   .container { width: 94%; }
@@ -1223,4 +1234,50 @@ ul { list-style: none; }
 
   .track-box { padding: 20px; }
   .track-input-group { flex-direction: column; }
+}
+
+/* ---------- Reduced animations on mobile/tablet ---------- */
+@media (max-width: 768px) {
+  .btn-gold:hover,
+  .btn-dark:hover,
+  .btn-outline:hover {
+    transform: none;
+  }
+  .product-card:hover {
+    transform: none;
+  }
+  .product-card .img-wrap img {
+    transition: none;
+  }
+  .product-card:hover .img-wrap img {
+    transform: none;
+  }
+  .wishlist-btn:hover {
+    transform: none;
+  }
+  .float-btn:hover {
+    transform: none;
+  }
+  .float-btn .tooltip {
+    display: none;
+  }
+  .nav-links a.active::after {
+    display: none;
+  }
+  .star-input span {
+    transition: none;
+  }
+  .modal-box {
+    transform: none;
+  }
+  .admin-action:hover {
+    background: none;
+  }
+  .toast {
+    transition: opacity 0.2s ease;
+    transform: none;
+  }
+  .toast.show {
+    transform: none;
+  }
 }
