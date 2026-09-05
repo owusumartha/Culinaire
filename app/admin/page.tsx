@@ -10,7 +10,7 @@ import {
 import { LockIcon, ShieldIcon } from '../components/Icons';
 
 const ADMIN_EMAIL = 'owusumartha2005@gmail.com';
-const ADMIN_PASSWORD = 'admin123';
+const ADMIN_PASSWORD = 'MaRtha@20';
 const CATEGORIES = ['Cookware', 'Knives', 'Dinnerware', 'Utensils', 'Appliances', 'Bakeware', 'Decor'];
 
 export default function AdminPage() {
