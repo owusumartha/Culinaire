@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { TargetIcon, StarIcon, HeartIcon } from '../components/Icons';
 
 export default function AboutPage() {
   return (
@@ -16,7 +17,7 @@ export default function AboutPage() {
             <div className="stat">
               <div><h3>500+</h3><span>Happy Customers</span></div>
               <div><h3>36+</h3><span>Premium Products</span></div>
-              <div><h3>4.8★</h3><span>Average Rating</span></div>
+              <div><h3 style={{ display: 'flex', alignItems: 'center', gap: 4 }}>4.8 <StarIcon size={18} color="#c9a227" filled /></h3><span>Average Rating</span></div>
             </div>
             <Link href="/shop" className="btn btn-gold" style={{ marginTop: 24 }}>Shop Our Collection</Link>
           </div>
@@ -28,17 +29,17 @@ export default function AboutPage() {
         <div className="container">
           <div className="features-grid">
             <div className="feature">
-              <div className="icon">🎯</div>
+              <div className="icon"><TargetIcon size={32} color="#c9a227" /></div>
               <h4>Our Mission</h4>
               <p>To make premium kitchenware accessible to every home cook in Ghana, combining quality craftsmanship with affordable pricing.</p>
             </div>
             <div className="feature">
-              <div className="icon">⭐</div>
+              <div className="icon"><StarIcon size={32} color="#c9a227" filled /></div>
               <h4>Quality First</h4>
               <p>Every product is hand-picked and tested. We partner with trusted brands to ensure lasting durability and performance.</p>
             </div>
             <div className="feature">
-              <div className="icon">❤️</div>
+              <div className="icon"><HeartIcon size={32} color="#c9a227" filled /></div>
               <h4>Customer Obsessed</h4>
               <p>Your satisfaction is our priority. From fast delivery to responsive support, we go above and beyond for every order.</p>
             </div>

@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { Product } from '../lib/types';
-import { formatPrice, getProductImageSrc, starsHTML } from '../lib/products';
-import { useCart } from '../lib/contexts';
-import { useWishlist } from '../lib/contexts';
+import { formatPrice, getProductImageSrc } from '../lib/products';
+import { useCart, useWishlist } from '../lib/contexts';
+import { HeartIcon, StarIcon } from './Icons';
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart();
@@ -16,7 +16,7 @@ export default function ProductCard({ product }: { product: Product }) {
         className={`wishlist-btn ${isWishlisted(product.id) ? 'active' : ''}`}
         onClick={() => toggleWishlist(product.id)}
       >
-        {isWishlisted(product.id) ? '♥' : '♡'}
+        <HeartIcon size={20} filled={isWishlisted(product.id)} color="#c9a227" />
       </button>
       <Link href={`/product/${product.id}`} className="img-wrap">
         <img src={getProductImageSrc(product.image)} alt={product.name} loading="lazy" />
@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
       <div className="card-body">
         <span className="card-cat">{product.category}</span>
         <h3><Link href={`/product/${product.id}`}>{product.name}</Link></h3>
-        <p style={{ color: '#c9a227', fontSize: '0.85rem', marginBottom: 6 }}>{starsHTML(product.rating)} ({product.rating})</p>
+        <p style={{ color: '#c9a227', fontSize: '0.85rem', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 2 }}>{[1,2,3,4,5].map(s => <StarIcon key={s} size={14} color="#c9a227" filled={s <= Math.round(product.rating)} />)} ({product.rating})</p>
         <div className="price">
           {formatPrice(product.price)}
           {product.oldPrice && <span className="old">{formatPrice(product.oldPrice)}</span>}

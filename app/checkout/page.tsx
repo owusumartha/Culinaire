@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCart } from '../lib/contexts';
 import { useToast } from '../lib/contexts';
 import { getProduct, formatPrice, getProductImageSrc } from '../lib/products';
+import { CartIcon } from '../components/Icons';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function CheckoutPage() {
         <section className="section">
           <div className="container">
             <div className="empty-cart">
-              <div className="icon">🛒</div>
+              <div className="icon"><CartIcon size={48} color="#c9a227" /></div>
               <h3>Your cart is empty</h3>
               <a href="/shop" className="btn btn-gold">Browse Products</a>
             </div>

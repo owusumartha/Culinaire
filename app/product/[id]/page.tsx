@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getProduct, getAllProducts, formatPrice, getProductImageSrc, starsHTML, getReviews, addReview, avgRating } from '../../lib/products';
+import { getProduct, getAllProducts, formatPrice, getProductImageSrc, getReviews, addReview, avgRating } from '../../lib/products';
 import { useCart } from '../../lib/contexts';
 import { useWishlist } from '../../lib/contexts';
 import ProductCard from '../../components/ProductCard';
+import { HeartIcon, StarIcon, TruckIcon, ShieldIcon, RotateCcwIcon } from '../../components/Icons';
 import { Product, Review } from '../../lib/types';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
@@ -62,7 +63,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 className={`wishlist-btn ${isWishlisted(product.id) ? 'active' : ''}`}
                 onClick={() => toggleWishlist(product.id)}
               >
-                {isWishlisted(product.id) ? '♥' : '♡'}
+                {isWishlisted(product.id) ? <HeartIcon size={20} filled color="#c9a227" /> : <HeartIcon size={20} color="#c9a227" />}
               </button>
               <img src={getProductImageSrc(product.image)} alt={product.name} />
             </div>
@@ -70,8 +71,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <span className="card-cat">{product.category}</span>
               {product.badge && <span className="card-badge" style={{ marginLeft: 8 }}>{product.badge}</span>}
               <h1>{product.name}</h1>
-              <p style={{ color: '#c9a227', fontSize: '0.95rem', margin: '8px 0 16px' }}>
-                {starsHTML(product.rating)} ({product.rating})
+              <p style={{ color: '#c9a227', fontSize: '0.95rem', margin: '8px 0 16px', display: 'flex', alignItems: 'center', gap: 4 }}>
+                {[1,2,3,4,5].map(s => <StarIcon key={s} size={16} color="#c9a227" filled={s <= Math.round(product.rating)} />)} ({product.rating})
               </p>
               <div className="price" style={{ fontSize: '1.5rem', marginBottom: 16 }}>
                 {formatPrice(product.price)}
@@ -101,9 +102,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               </div>
 
               <div style={{ marginTop: 24, display: 'flex', gap: 24, fontSize: '0.85rem', color: '#6b6b6b' }}>
-                <div>🚚 Free delivery over ₵1,000</div>
-                <div>🛡️ Quality guarantee</div>
-                <div>↩️ Easy returns</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><TruckIcon size={16} color="#c9a227" /> Free delivery over ₵1,000</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><ShieldIcon size={16} color="#c9a227" /> Quality guarantee</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}><RotateCcwIcon size={16} color="#c9a227" /> Easy returns</div>
               </div>
             </div>
           </div>
@@ -126,7 +127,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <div className="review-item" key={i}>
                 <div className="review-header">
                   <strong>{r.name}</strong>
-                  <span style={{ color: '#c9a227' }}>{starsHTML(r.rating)}</span>
+                  <span style={{ display: 'flex', gap: 2 }}>{[1,2,3,4,5].map(s => <StarIcon key={s} size={14} color="#c9a227" filled={s <= r.rating} />)}</span>
                   <span style={{ color: '#999', fontSize: '0.8rem' }}>{r.date}</span>
                 </div>
                 <p>{r.text}</p>
@@ -145,9 +146,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                       onClick={() => setReviewRating(star)}
                       onMouseEnter={() => setHoverRating(star)}
                       onMouseLeave={() => setHoverRating(0)}
-                      style={{ cursor: 'pointer', fontSize: '1.5rem', color: star <= (hoverRating || reviewRating) ? '#c9a227' : '#ccc' }}
+                      style={{ cursor: 'pointer', color: star <= (hoverRating || reviewRating) ? '#c9a227' : '#ccc' }}
                     >
-                      ★
+                      <StarIcon size={24} filled={star <= (hoverRating || reviewRating)} color={star <= (hoverRating || reviewRating) ? '#c9a227' : '#ccc'} />
                     </span>
                   ))}
                 </div>

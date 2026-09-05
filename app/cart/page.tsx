@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCart } from '../lib/contexts';
 import { getProduct, formatPrice, getProductImageSrc } from '../lib/products';
+import { CartIcon } from '../components/Icons';
 
 export default function CartPage() {
   const { cart, updateQty, removeFromCart } = useCart();
@@ -25,7 +26,7 @@ export default function CartPage() {
         <section className="section">
           <div className="container">
             <div className="empty-cart">
-              <div className="icon">🛒</div>
+              <div className="icon"><CartIcon size={48} color="#c9a227" /></div>
               <h3>Your cart is empty</h3>
               <p style={{ color: '#6b6b6b', marginBottom: 20 }}>Looks like you haven&apos;t added anything yet.</p>
               <Link href="/shop" className="btn btn-gold">Browse Products</Link>

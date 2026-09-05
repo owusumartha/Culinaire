@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useToast } from '../lib/contexts';
+import { PhoneIcon } from '../components/Icons';
 
 export default function WholesalePage() {
   const { showToast } = useToast();
@@ -22,7 +23,7 @@ export default function WholesalePage() {
     const enquiries = JSON.parse(localStorage.getItem('culinaireEnquiries') || '[]');
     enquiries.push({ ...form, date: new Date().toISOString() });
     localStorage.setItem('culinaireEnquiries', JSON.stringify(enquiries));
-    showToast('✓ Enquiry submitted! We will contact you soon.');
+    showToast('Enquiry submitted! We will contact you soon.');
     setForm({ business: '', name: '', phone: '', email: '', products: '', quantity: '', message: '' });
   };
 
@@ -36,7 +37,7 @@ export default function WholesalePage() {
           <div className="wholesale-banner" style={{ textAlign: 'center', padding: '40px 20px', background: '#1a1a1a', borderRadius: 12, color: '#fff', marginBottom: 40 }}>
             <h2 style={{ color: '#fff', marginBottom: 12 }}>Need Bulk Kitchenware?</h2>
             <p style={{ color: '#ccc', marginBottom: 20 }}>Special pricing for restaurants, hotels, and retailers. Get in touch for a custom quote.</p>
-            <a href="tel:0245009447" className="btn btn-gold">📞 Call Us Now</a>
+            <a href="tel:0245009447" className="btn btn-gold" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><PhoneIcon size={18} color="#fff" /> Call Us Now</a>
           </div>
 
           <div style={{ maxWidth: 600, margin: '0 auto' }}>

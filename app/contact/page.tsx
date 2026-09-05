@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useToast } from '../lib/contexts';
+import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, ChatIcon } from '../components/Icons';
 
 export default function ContactPage() {
   const { showToast } = useToast();
@@ -13,7 +14,7 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('✓ Message sent! We will get back to you soon.');
+    showToast('Message sent! We will get back to you soon.');
     setForm({ name: '', email: '', subject: '', message: '' });
   };
 
@@ -29,28 +30,28 @@ export default function ContactPage() {
             <div className="contact-info">
               <h3>Get In Touch</h3>
               <div className="contact-item">
-                <div className="icon">📍</div>
+                <div className="icon"><MapPinIcon size={24} color="#c9a227" /></div>
                 <div>
                   <h4>Visit Us</h4>
                   <p>Konongo, Ghana</p>
                 </div>
               </div>
               <div className="contact-item">
-                <div className="icon">📞</div>
+                <div className="icon"><PhoneIcon size={24} color="#c9a227" /></div>
                 <div>
                   <h4>Call Us</h4>
                   <p>0245009447</p>
                 </div>
               </div>
               <div className="contact-item">
-                <div className="icon">✉️</div>
+                <div className="icon"><MailIcon size={24} color="#c9a227" /></div>
                 <div>
                   <h4>Email Us</h4>
                   <p>owusumartha2005@gmail.com</p>
                 </div>
               </div>
               <div className="contact-item">
-                <div className="icon">🕐</div>
+                <div className="icon"><ClockIcon size={24} color="#c9a227" /></div>
                 <div>
                   <h4>Working Hours</h4>
                   <p>Mon – Fri: 8:00 AM – 6:00 PM</p>
@@ -102,7 +103,7 @@ export default function ContactPage() {
                 alt="WhatsApp QR Code"
                 style={{ width: 200, height: 200 }}
               />
-              <p style={{ marginTop: 10, fontWeight: 600 }}>📞 0245009447</p>
+              <p style={{ marginTop: 10, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><PhoneIcon size={16} color="#c9a227" /> 0245009447</p>
             </div>
             <div style={{ marginTop: 20 }}>
               <a href="https://wa.me/233245009447?text=Hello%20Culinaire!" target="_blank" rel="noopener" className="btn btn-gold">

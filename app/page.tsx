@@ -4,6 +4,7 @@ import Link from 'next/link';
 import ProductCard from './components/ProductCard';
 import { getAllProducts } from './lib/products';
 import { useState, useEffect } from 'react';
+import { TruckIcon, ShieldIcon, ChatIcon, LockIcon, StarIcon, CheckIcon } from './components/Icons';
 
 const featuredIds = [16, 13, 22, 7, 2, 14];
 
@@ -40,22 +41,22 @@ export default function HomePage() {
       <section className="features">
         <div className="container features-grid">
           <div className="feature">
-            <div className="icon">🚚</div>
+            <div className="icon"><TruckIcon size={32} color="#c9a227" /></div>
             <h4>Fast Delivery</h4>
             <p>Free shipping on orders over ₵1,000</p>
           </div>
           <div className="feature">
-            <div className="icon">🛡️</div>
+            <div className="icon"><ShieldIcon size={32} color="#c9a227" /></div>
             <h4>Premium Quality</h4>
             <p>Hand-picked, durable kitchenware</p>
           </div>
           <div className="feature">
-            <div className="icon">💬</div>
+            <div className="icon"><ChatIcon size={32} color="#c9a227" /></div>
             <h4>Expert Support</h4>
             <p>Friendly help whenever you need it</p>
           </div>
           <div className="feature">
-            <div className="icon">🔒</div>
+            <div className="icon"><LockIcon size={32} color="#c9a227" /></div>
             <h4>Secure Checkout</h4>
             <p>Safe and easy ordering process</p>
           </div>
@@ -90,7 +91,7 @@ export default function HomePage() {
             <div className="stat">
               <div><h3>500+</h3><span>Happy Customers</span></div>
               <div><h3>36+</h3><span>Premium Products</span></div>
-              <div><h3>4.8★</h3><span>Average Rating</span></div>
+              <div><h3 style={{ display: 'flex', alignItems: 'center', gap: 4 }}>4.8 <StarIcon size={18} color="#c9a227" filled /></h3><span>Average Rating</span></div>
             </div>
             <Link href="/about" className="btn btn-gold" style={{ marginTop: 24 }}>Learn More</Link>
           </div>
@@ -115,7 +116,7 @@ export default function HomePage() {
                 <div>
                   <div className="author-name">Ama Mensah</div>
                   <div className="author-loc">Accra</div>
-                  <div style={{ color: '#c9a227', fontSize: '0.85rem' }}>★★★★★</div>
+                  <div style={{ display: 'flex', gap: 2 }}><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /></div>
                 </div>
               </div>
             </div>
@@ -127,7 +128,7 @@ export default function HomePage() {
                 <div>
                   <div className="author-name">Kwame Boateng</div>
                   <div className="author-loc">Kumasi</div>
-                  <div style={{ color: '#c9a227', fontSize: '0.85rem' }}>★★★★★</div>
+                  <div style={{ display: 'flex', gap: 2 }}><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /></div>
                 </div>
               </div>
             </div>
@@ -139,7 +140,7 @@ export default function HomePage() {
                 <div>
                   <div className="author-name">Efua Owusu</div>
                   <div className="author-loc">Konongo</div>
-                  <div style={{ color: '#c9a227', fontSize: '0.85rem' }}>★★★★★</div>
+                  <div style={{ display: 'flex', gap: 2 }}><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /><StarIcon size={14} color="#c9a227" filled /></div>
                 </div>
               </div>
             </div>
@@ -162,7 +163,7 @@ export default function HomePage() {
             />
             <button className="btn btn-dark" type="submit">Subscribe</button>
           </form>
-          {subscribed && <p style={{ color: '#1a1a1a', fontWeight: 600, marginTop: 12 }}>✓ Subscribed! Welcome to Culinaire.</p>}
+          {subscribed && <p style={{ color: '#1a1a1a', fontWeight: 600, marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}><CheckIcon size={16} color="#27ae60" /> Subscribed! Welcome to Culinaire.</p>}
         </div>
       </section>
     </>

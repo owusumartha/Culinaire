@@ -129,7 +129,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { id, qty }];
     });
-    showToast('✓ Added to cart');
+    showToast('Added to cart');
   }, [showToast]);
 
   const updateQty = useCallback((id: number, qty: number) => {
@@ -204,7 +204,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
         showToast('Removed from wishlist');
         return prev.filter(w => w !== id);
       }
-      showToast('♥ Added to wishlist');
+      showToast('Added to wishlist');
       return [...prev, id];
     });
   }, [showToast]);

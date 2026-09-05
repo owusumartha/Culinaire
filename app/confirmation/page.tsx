@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { formatPrice } from '../lib/products';
 import { Order } from '../lib/types';
+import { CheckIcon, PackageIcon } from '../components/Icons';
 
 export default function ConfirmationPage() {
   const [order, setOrder] = useState<Order | null>(null);
@@ -22,7 +23,7 @@ export default function ConfirmationPage() {
       <section className="section">
         <div className="container">
           <div className="empty-cart">
-            <div className="icon">📦</div>
+            <div className="icon"><PackageIcon size={48} color="#c9a227" /></div>
             <h3>No order found</h3>
             <p style={{ color: '#6b6b6b', marginBottom: 20 }}>You haven&apos;t placed an order yet.</p>
             <Link href="/shop" className="btn btn-gold">Browse Products</Link>
@@ -42,7 +43,7 @@ export default function ConfirmationPage() {
     <section className="section">
       <div className="container">
         <div className="confirmation">
-          <div style={{ fontSize: '4rem', color: '#27ae60', marginBottom: 16 }}>✓</div>
+          <div style={{ marginBottom: 16 }}><CheckIcon size={64} color="#27ae60" /></div>
           <h2>Thank you, {customer.name ? customer.name.split(' ')[0] : 'Customer'}!</h2>
           <p>Your order has been placed successfully.</p>
           <div className="order-no">Order #{order.orderNo || 'N/A'}</div>

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { MapPinIcon, PhoneIcon, MailIcon } from './Icons';
 
 export default function Footer() {
   return (
@@ -29,9 +30,9 @@ export default function Footer() {
           </div>
           <div>
             <h4>Contact</h4>
-            <p>📍 Konongo, Ghana</p>
-            <p>📞 0245009447</p>
-            <p>✉️ owusumartha2005@gmail.com</p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}><MapPinIcon size={16} color="#c9a227" /> Konongo, Ghana</p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}><PhoneIcon size={16} color="#c9a227" /> 0245009447</p>
+            <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}><MailIcon size={16} color="#c9a227" /> owusumartha2005@gmail.com</p>
           </div>
         </div>
         <div className="footer-bottom">© 2026 Culinaire. All rights reserved.</div>
