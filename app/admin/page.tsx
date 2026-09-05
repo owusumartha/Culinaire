@@ -36,11 +36,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     initEmailJS();
-    const session = localStorage.getItem('culinaireAdminSession');
-    if (session === 'true') {
-      setLoggedIn(true);
-      loadProducts();
-    }
+    localStorage.removeItem('culinaireAdminSession');
     setIsFirst(isFirstLogin());
   }, []);
 
@@ -56,7 +52,6 @@ export default function AdminPage() {
       setAdminEmail(loginEmail);
       if (loginPass === ADMIN_PASSWORD) {
         setLoggedIn(true);
-        localStorage.setItem('culinaireAdminSession', 'true');
         setIsFirst(false);
         loadProducts();
       } else {
@@ -78,13 +73,11 @@ export default function AdminPage() {
     }
 
     setLoggedIn(true);
-    localStorage.setItem('culinaireAdminSession', 'true');
     loadProducts();
   };
 
   const handleLogout = () => {
     setLoggedIn(false);
-    localStorage.removeItem('culinaireAdminSession');
   };
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
