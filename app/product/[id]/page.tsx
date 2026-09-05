@@ -64,10 +64,6 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank');
   };
 
-  const shareFacebook = () => {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
-  };
-
   const copyLink = () => {
     navigator.clipboard.writeText(shareUrl);
     setCopied(true);
@@ -139,9 +135,6 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <div style={{ marginTop: 20, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 <button className="share-btn whatsapp" onClick={shareWhatsApp}>
                   <ChatIcon size={16} color="#fff" /> WhatsApp
-                </button>
-                <button className="share-btn facebook" onClick={shareFacebook}>
-                  Facebook
                 </button>
                 <button className="share-btn copy" onClick={copyLink}>
                   {copied ? 'Copied!' : 'Copy Link'}

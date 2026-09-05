@@ -1312,7 +1312,6 @@ ul { list-style: none; }
 }
 .share-btn:hover { opacity: 0.85; }
 .share-btn.whatsapp { background: #25d366; color: #fff; }
-.share-btn.facebook { background: #1877f2; color: #fff; }
 .share-btn.copy { background: var(--charcoal); color: #fff; }
 
 /* ---------- Back to top ---------- */
