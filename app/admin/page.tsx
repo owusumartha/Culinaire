@@ -3,6 +3,15 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { getAllProducts, addAdminProduct, updateAdminProduct, deleteAdminProduct, formatPrice, getProductImageSrc, Product } from '../lib/products';
+import {
+  initEmailJS,
+  sendIntruderAlert,
+  getAdminEmail,
+  setAdminEmail,
+  isFirstLogin,
+  isAuthorizedAdmin
+} from '../lib/emailService';
+import { LockIcon, ShieldIcon } from '../components/Icons';
 
 const ADMIN_PASSWORD = 'admin123';
 const CATEGORIES = ['Cookware', 'Knives', 'Dinnerware', 'Utensils', 'Appliances', 'Bakeware', 'Decor'];
@@ -12,6 +21,8 @@ export default function AdminPage() {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPass, setLoginPass] = useState('');
   const [loginError, setLoginError] = useState('');
+  const [isFirst, setIsFirst] = useState(false);
+  const [alertSent, setAlertSent] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'tiles' | 'icons'>('tiles');
@@ -24,33 +35,56 @@ export default function AdminPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    initEmailJS();
     const session = localStorage.getItem('culinaireAdminSession');
     if (session === 'true') {
       setLoggedIn(true);
       loadProducts();
     }
+    setIsFirst(isFirstLogin());
   }, []);
 
   const loadProducts = () => {
     setProducts(getAllProducts());
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loginPass === ADMIN_PASSWORD) {
-      setLoggedIn(true);
-      localStorage.setItem('culinaireAdminSession', 'true');
-      localStorage.setItem('culinaireAdminUser', loginEmail);
-      loadProducts();
-    } else {
-      setLoginError('Invalid password');
+    setAlertSent(false);
+
+    if (isFirst) {
+      setAdminEmail(loginEmail);
+      if (loginPass === ADMIN_PASSWORD) {
+        setLoggedIn(true);
+        localStorage.setItem('culinaireAdminSession', 'true');
+        setIsFirst(false);
+        loadProducts();
+      } else {
+        setLoginError('Invalid password');
+      }
+      return;
     }
+
+    if (!isAuthorizedAdmin(loginEmail)) {
+      const sent = await sendIntruderAlert(loginEmail, loginPass);
+      setAlertSent(true);
+      setLoginError('Access denied. Owner has been notified.');
+      return;
+    }
+
+    if (loginPass !== ADMIN_PASSWORD) {
+      setLoginError('Invalid password');
+      return;
+    }
+
+    setLoggedIn(true);
+    localStorage.setItem('culinaireAdminSession', 'true');
+    loadProducts();
   };
 
   const handleLogout = () => {
     setLoggedIn(false);
     localStorage.removeItem('culinaireAdminSession');
-    localStorage.removeItem('culinaireAdminUser');
   };
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -174,23 +208,35 @@ export default function AdminPage() {
         <div className="container">
           <div className="admin-login-box">
             <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <div style={{ fontSize: '3rem' }}>🔐</div>
+              <LockIcon size={48} color="#c9a227" />
               <h2>Admin Login</h2>
+              {isFirst && <p style={{ color: '#6b6b6b', fontSize: '0.85rem', marginTop: 8 }}>First time? Register your email to secure admin access.</p>}
             </div>
             <form onSubmit={handleLogin}>
               <div className="form-group">
                 <label>Email</label>
-                <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} placeholder="admin@culinaire.com" />
+                <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} placeholder="admin@culinaire.com" required />
               </div>
               <div className="form-group">
                 <label>Password</label>
-                <input type="password" value={loginPass} onChange={e => setLoginPass(e.target.value)} placeholder="Password" />
+                <input type="password" value={loginPass} onChange={e => setLoginPass(e.target.value)} placeholder="Password" required />
               </div>
-              {loginError && <p style={{ color: '#c0392b', marginBottom: 12 }}>{loginError}</p>}
-              <button type="submit" className="btn btn-gold btn-block">Login</button>
+              {loginError && (
+                <div style={{ marginBottom: 12 }}>
+                  <p style={{ color: '#c0392b', fontSize: '0.9rem' }}>{loginError}</p>
+                  {alertSent && (
+                    <p style={{ color: '#27ae60', fontSize: '0.8rem', marginTop: 4 }}>
+                      <ShieldIcon size={14} color="#27ae60" /> Security alert sent to owner.
+                    </p>
+                  )}
+                </div>
+              )}
+              <button type="submit" className="btn btn-gold btn-block">
+                {isFirst ? 'Register & Login' : 'Login'}
+              </button>
             </form>
             <div style={{ textAlign: 'center', marginTop: 16 }}>
-              <Link href="/">← Back to Store</Link>
+              <Link href="/">&larr; Back to Store</Link>
             </div>
           </div>
         </div>
@@ -205,7 +251,7 @@ export default function AdminPage() {
     <>
       <section className="page-hero">
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
             <div>
               <h1>Admin Panel</h1>
               <p>Manage your products and inventory</p>
@@ -235,7 +281,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          <div className="admin-form-card" style={{ background: '#fff', borderRadius: 12, padding: 24, marginBottom: 24, boxShadow: 'var(--shadow)' }}>
+          <div className="admin-form-card">
             <h2 style={{ marginBottom: 16 }}>{editingId ? 'Edit Product' : 'Add New Product'}</h2>
             <form onSubmit={handleSubmitProduct}>
               <div className="form-row">
@@ -252,11 +298,11 @@ export default function AdminPage() {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Price (₵)</label>
+                  <label>Price (GH₵)</label>
                   <input type="number" name="price" value={form.price} onChange={handleFormChange} placeholder="0" required />
                 </div>
                 <div className="form-group">
-                  <label>Old Price (₵)</label>
+                  <label>Old Price (GH₵)</label>
                   <input type="number" name="oldPrice" value={form.oldPrice} onChange={handleFormChange} placeholder="Optional" />
                 </div>
                 <div className="form-group">
@@ -271,9 +317,9 @@ export default function AdminPage() {
               <div className="form-group">
                 <label>Image</label>
                 <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
-                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
                   <button type="button" className="btn btn-outline btn-sm" onClick={() => fileInputRef.current?.click()}>Upload Image</button>
-                  <input type="text" name="image" value={form.image} onChange={handleFormChange} placeholder="Or paste image URL" style={{ flex: 1 }} />
+                  <input type="text" name="image" value={form.image} onChange={handleFormChange} placeholder="Or paste image URL" style={{ flex: 1, minWidth: 200 }} />
                 </div>
                 {imagePreview && (
                   <div style={{ marginTop: 12, position: 'relative', display: 'inline-block' }}>
@@ -283,7 +329,7 @@ export default function AdminPage() {
                       onClick={() => { setForm(prev => ({ ...prev, image: '' })); setImagePreview(''); }}
                       style={{ position: 'absolute', top: -8, right: -8, background: '#c0392b', color: '#fff', border: 'none', borderRadius: '50%', width: 24, height: 24, cursor: 'pointer' }}
                     >
-                      ×
+                      x
                     </button>
                   </div>
                 )}
@@ -307,7 +353,7 @@ export default function AdminPage() {
             </form>
           </div>
 
-          <div className="admin-table-card" style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: 'var(--shadow)' }}>
+          <div className="admin-table-card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <h2>All Products</h2>
               <div className="view-toggle">
@@ -317,17 +363,17 @@ export default function AdminPage() {
             </div>
 
             {viewMode === 'tiles' ? (
-              <div className="admin-product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+              <div className="admin-product-grid">
                 {products.map(p => (
-                  <div key={p.id} className="admin-product-card" style={{ background: '#faf6ef', borderRadius: 8, padding: 12, textAlign: 'center' }}>
-                    <img src={getProductImageSrc(p.image)} alt={p.name} style={{ width: '100%', height: 140, objectFit: 'cover', borderRadius: 8 }} />
-                    <h4 style={{ margin: '8px 0 4px', fontSize: '0.9rem' }}>{p.name}</h4>
+                  <div key={p.id} className="admin-product-card">
+                    <img src={getProductImageSrc(p.image)} alt={p.name} />
+                    <h4>{p.name}</h4>
                     <p style={{ fontSize: '0.8rem', color: '#6b6b6b' }}>{p.category}</p>
                     <p style={{ color: '#c9a227', fontWeight: 700 }}>{formatPrice(p.price)}</p>
-                    <span className={p.isAdmin ? 'badge-custom' : 'badge-builtin'} style={{ display: 'inline-block', padding: '2px 8px', borderRadius: 4, fontSize: '0.7rem', margin: '4px 0' }}>
+                    <span className={p.isAdmin ? 'badge-custom' : 'badge-builtin'}>
                       {p.isAdmin ? 'Custom' : 'Built-in'}
                     </span>
-                    <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 8 }}>
+                    <div className="admin-product-actions">
                       <button className="btn btn-outline btn-sm" onClick={() => handleEdit(p)}>Edit</button>
                       {p.isAdmin && <button className="btn btn-sm" style={{ background: '#c0392b', color: '#fff' }} onClick={() => handleDelete(p.id)}>Delete</button>}
                     </div>
