@@ -32,7 +32,7 @@ export default function Footer() {
             <h4>Contact</h4>
             <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}><MapPinIcon size={16} color="#c9a227" /> Konongo, Ghana</p>
             <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}><PhoneIcon size={16} color="#c9a227" /> 0245009447</p>
-            <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}><MailIcon size={16} color="#c9a227" /> owusumartha2005@gmail.com</p>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=owusumartha2005@gmail.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#f1e9dc' }}><MailIcon size={16} color="#c9a227" /> owusumartha2005@gmail.com</a>
           </div>
         </div>
         <div className="footer-bottom">© 2026 Culinaire. All rights reserved.</div>

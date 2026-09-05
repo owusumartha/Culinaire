@@ -1,21 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useToast } from '../lib/contexts';
-import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, ChatIcon } from '../components/Icons';
+import { MapPinIcon, PhoneIcon, MailIcon, ClockIcon, ShieldIcon } from '../components/Icons';
 
 export default function ContactPage() {
   const { showToast } = useToast();
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', captcha: '' });
+  const [captchaError, setCaptchaError] = useState('');
+
+  const captcha = useMemo(() => {
+    const a = Math.floor(Math.random() * 10) + 1;
+    const b = Math.floor(Math.random() * 10) + 1;
+    return { a, b, answer: a + b };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setCaptchaError('');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (Number(form.captcha) !== captcha.answer) {
+      setCaptchaError('Incorrect answer. Please try again.');
+      return;
+    }
     showToast('Message sent! We will get back to you soon.');
-    setForm({ name: '', email: '', subject: '', message: '' });
+    setForm({ name: '', email: '', subject: '', message: '', captcha: '' });
   };
 
   return (
@@ -47,7 +59,14 @@ export default function ContactPage() {
                 <div className="icon"><MailIcon size={24} color="#c9a227" /></div>
                 <div>
                   <h4>Email Us</h4>
-                  <p>owusumartha2005@gmail.com</p>
+                  <a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=owusumartha2005@gmail.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#c9a227', fontWeight: 600 }}
+                  >
+                    owusumartha2005@gmail.com
+                  </a>
                 </div>
               </div>
               <div className="contact-item">
@@ -84,6 +103,21 @@ export default function ContactPage() {
                 <div className="form-group">
                   <label>Message</label>
                   <textarea name="message" value={form.message} onChange={handleChange} placeholder="Your message..." rows={5} required />
+                </div>
+                <div className="form-group">
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <ShieldIcon size={16} color="#c9a227" /> What is {captcha.a} + {captcha.b}?
+                  </label>
+                  <input
+                    type="number"
+                    name="captcha"
+                    value={form.captcha}
+                    onChange={handleChange}
+                    placeholder="Enter the answer"
+                    required
+                    style={captchaError ? { borderColor: '#c0392b' } : {}}
+                  />
+                  {captchaError && <div className="error-msg" style={{ display: 'block', color: '#c0392b', fontSize: '0.8rem', marginTop: 4 }}>{captchaError}</div>}
                 </div>
                 <button type="submit" className="btn btn-gold btn-block">Send Message</button>
               </form>
