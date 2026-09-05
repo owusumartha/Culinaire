@@ -887,6 +887,23 @@ ul { list-style: none; }
 .float-btn:hover { transform: scale(1.1); }
 .float-btn.whatsapp { background: #25d366; }
 .float-btn.call { background: var(--gold); }
+.float-btn.wishlist-float { background: #e74c3c; }
+.float-btn.cart-float { background: var(--charcoal); }
+.float-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--gold);
+  color: var(--charcoal);
+  font-size: 0.65rem;
+  font-weight: bold;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .float-btn .tooltip {
   position: absolute;
   right: 70px;

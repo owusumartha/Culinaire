@@ -3,14 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useCart, useWishlist, useTheme } from '../lib/contexts';
-import { MenuIcon, MoonIcon, SunIcon, HeartIcon, CartIcon } from './Icons';
+import { useTheme } from '../lib/contexts';
+import { MenuIcon, MoonIcon, SunIcon } from './Icons';
 
 export default function Header() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { cartCount } = useCart();
-  const { wishlistCount } = useWishlist();
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -47,18 +45,6 @@ export default function Header() {
           >
             {theme === 'light' ? <MoonIcon size={18} /> : <SunIcon size={18} />}
           </button>
-          <Link href="/wishlist" className="cart-icon">
-            <HeartIcon size={20} filled />
-            <span className="wishlist-count" style={{ display: wishlistCount > 0 ? 'flex' : 'none' }}>
-              {wishlistCount}
-            </span>
-          </Link>
-          <Link href="/cart" className="cart-icon">
-            <CartIcon size={20} />
-            <span className="cart-count" style={{ display: cartCount > 0 ? 'flex' : 'none' }}>
-              {cartCount}
-            </span>
-          </Link>
         </div>
       </nav>
     </header>

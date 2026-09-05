@@ -1,14 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { ChatIcon, PhoneIcon } from './Icons';
+import Link from 'next/link';
+import { ChatIcon, PhoneIcon, HeartIcon, CartIcon } from './Icons';
+import { useCart, useWishlist } from '../lib/contexts';
 
 export default function FloatingButtons() {
   const [modalOpen, setModalOpen] = useState(false);
+  const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
 
   return (
     <>
       <div className="floating-contact">
+        <Link href="/wishlist" className="float-btn wishlist-float" aria-label="Wishlist">
+          <HeartIcon size={22} filled color="#fff" />
+          {wishlistCount > 0 && <span className="float-badge">{wishlistCount}</span>}
+        </Link>
+        <Link href="/cart" className="float-btn cart-float" aria-label="Cart">
+          <CartIcon size={22} color="#fff" />
+          {cartCount > 0 && <span className="float-badge">{cartCount}</span>}
+        </Link>
         <button className="float-btn whatsapp" onClick={() => setModalOpen(true)} aria-label="WhatsApp">
           <span className="tooltip">Scan QR to chat</span>
           <ChatIcon size={24} color="#fff" />
