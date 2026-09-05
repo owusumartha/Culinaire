@@ -15,7 +15,7 @@ const CATEGORIES = ['Cookware', 'Knives', 'Dinnerware', 'Utensils', 'Appliances'
 
 export default function AdminPage() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [loginEmail, setLoginEmail] = useState(ADMIN_EMAIL);
+  const [loginEmail, setLoginEmail] = useState('');
   const [loginPass, setLoginPass] = useState('');
   const [loginError, setLoginError] = useState('');
   const [alertSent, setAlertSent] = useState(false);
@@ -185,7 +185,7 @@ export default function AdminPage() {
             <form onSubmit={handleLogin}>
               <div className="form-group">
                 <label>Email</label>
-                <input type="email" value={loginEmail} readOnly style={{ background: '#f5f5f5', cursor: 'not-allowed' }} />
+                <input type="email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} placeholder="Enter your email" required />
               </div>
               <div className="form-group">
                 <label>Password</label>
